@@ -21,4 +21,8 @@ class Admission extends CI_Controller {
 	public function index() {
 		$this->load->view('apps_hots');
 	}
+
+	function submit_apps() {
+		$this->output->enable_profiler(true);
+	}
 }
