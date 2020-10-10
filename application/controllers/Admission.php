@@ -196,5 +196,104 @@ class Admission extends CI_Controller {
 
 		$this->load->view('apps_iel', $data);
 	}
+	
+		public function submit_apps_iel() {
+
+		$this->form_validation->set_rules('nationality', 'Nationality', 'required');
+		$this->form_validation->set_rules('gender', 'Gender', 'required');
+		$this->form_validation->set_rules('marital', 'Marital Status', 'required');
+
+		if ($this->form_validation->run() == false) {
+			$this->seed_apps();
+		} else {
+
+			$data_pemohon = array(
+				'nric' => $this->input->post('nric'),
+				'name' => strtoupper($this->input->post('name')),
+				'nationality' => strtoupper($this->input->post('nationality')),
+				'gender' => strtoupper($this->input->post('gender')),
+				'dob' => $this->input->post('dob'),
+				'phone' => strtoupper($this->input->post('hp')),
+				'marital_status' => strtoupper($this->input->post('marital')),
+				'email' => $this->input->post('email'),
+				'address' => strtoupper($this->input->post('address')),
+				'highest_education' => strtoupper($this->input->post('highest_education')),
+				'institution_name' => strtoupper($this->input->post('institution_name')),
+				'sector' => strtoupper($this->input->post('sector')),
+				'job_title' => strtoupper($this->input->post('job_title')),
+				'name_of_organization' => strtoupper($this->input->post('nama_of_organization')),
+				'organization_phone' => strtoupper($this->input->post('organization_number')),
+				'organization_address' => strtoupper($this->input->post('org_address')),
+				'officer_in_charge' => strtoupper($this->input->post('officer_in_charge')),
+				'nok_name' => strtoupper($this->input->post('nok_name')),
+				'nok_address' => strtoupper($this->input->post('nok_address')),
+				'nok_phone' => strtoupper($this->input->post('nok_phone')),
+				'nok_relation' => strtoupper($this->input->post('nok_relation')),
+				'program' => 'IEL',
+			);
+
+			$this->db->insert('pemohon_elpp', $data_pemohon);
+
+			$config = array(
+				'protocol' => 'mail',
+				'mailtype' => 'html',
+				'charset' => 'iso-8859-1',
+				'mailpath' => '/usr/sbin/sendmail',
+			);
+
+			$this->load->library('email');
+			$this->email->initialize($config);
+
+			$subject = "INTENSIVE ENGLISH LANGUAGE Application";
+			$message = "Salam Sejahtera, <br><br>";
+			$message .=
+				"<br>
+ ";
+			$message .= '<br><table rules="none" bordercolor="#ffffff" cellpadding="10" border="0" style = "border-collapse: collapse;">';
+			$message .= "<tr><td><strong>Full Name: </td><td>" . strtoupper($this->input->post('name')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Nationality: </td><td>" . strtoupper($this->input->post('nationality')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>NRIC/Passport: </td><td>" . strtoupper($this->input->post('nric')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Gender: </td><td>" . strtoupper($this->input->post('gender')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Date of Birth  : </td><td>" . $this->input->post('dob') . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Permanent Address</strong> </td><td>" . strtoupper($this->input->post('address')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Telephone Number : </td><td>" . $this->input->post('hp') . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Marital Status : </td><td>" . strtoupper($this->input->post('marital')) . "</strong></td></tr>";
+
+			$message .= "<tr><td><strong>Guardian Name: </td><td>" . strtoupper($this->input->post('nok_name')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Guardian Address </td><td>" . strtoupper($this->input->post('nok_address')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Guardian Number </td><td>" . strtoupper($this->input->post('nok_phone')) . "</strong></td></tr>";
+			$message .= "<tr><td><strong>Relationship</td><td>" . strtoupper($this->input->post('nok_relation')) . "</strong></td></tr>";
+			$message .= "</table>";
+
+			$message .= "------<br><br>
+
+[Cetakan Komputer] ";
+
+			$message .= "</body></html>";
+
+			// $this->load->library('email');
+
+			$this->email->from('');
+			$this->email->to('');
+			// $this->email->cc('');
+			$this->email->bcc('');
+
+			$this->email->subject($subject);
+			$this->email->message($message);
+
+			$this->email->send();
+
+			echo "<script>
+    			  window.alert('Borang permohonan berjaya dihantar');
+    			  window.location.href = 'elpp_apps';
+			</script>";
+
+			$this->iel_apps();
+
+		}
+
+		$this->output->enable_profiler(false);
+	}
+
 
 }
