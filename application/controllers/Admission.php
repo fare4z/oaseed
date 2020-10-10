@@ -171,5 +171,30 @@ class Admission extends CI_Controller {
 
 		$this->output->enable_profiler(false);
 	}
+	
+		public function iel_apps() {
+
+		$data = array();
+
+		$data['gender'] = array(
+			'' => 'Please Choose',
+			'Male' => 'Male',
+			'Female' => 'Female',
+		);
+
+		$data['nationality'] = array(
+			'' => 'Please Choose',
+			'Malaysian' => 'Malaysian',
+			'Others' => 'Others',
+		);
+
+		$data['marital'] = array(
+			'' => 'Please Choose',
+			'Single' => 'Single',
+			'Married' => 'Married',
+		);
+
+		$this->load->view('apps_iel', $data);
+	}
 
 }
