@@ -337,4 +337,97 @@ class Admission extends CI_Controller
         $this->load->view('apps_shortcourse', $data);
     }
 
+    public function submit_sc_apps()
+    {
+
+        $this->form_validation->set_rules('course_selection', 'Courses Selection', 'required');
+        $this->form_validation->set_rules('gender', 'Gender', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->shortcourse_apps();
+        } else {
+
+            $data_pemohon = array(
+                'nric' => $this->input->post('nric'),
+                'name' => strtoupper($this->input->post('name')),
+                'nationality' => strtoupper($this->input->post('nationality')),
+                'gender' => strtoupper($this->input->post('gender')),
+                'dob' => $this->input->post('dob'),
+                'phone' => strtoupper($this->input->post('hp')),
+                'marital_status' => strtoupper($this->input->post('marital')),
+                'email' => $this->input->post('email'),
+                'address' => strtoupper($this->input->post('address')),
+                'course_selection' => strtoupper($this->input->post('course_selection')),
+                'highest_education' => strtoupper($this->input->post('highest_education')),
+                'institution_name' => strtoupper($this->input->post('institution_name')),
+                'sector' => strtoupper($this->input->post('sector')),
+                'job_title' => strtoupper($this->input->post('job_title')),
+                'name_of_organization' => strtoupper($this->input->post('nama_of_organization')),
+                'organization_phone' => strtoupper($this->input->post('organization_number')),
+                'organization_address' => strtoupper($this->input->post('org_address')),
+                'organization_email' => $this->input->post('org_email'),
+                'officer_in_charge' => strtoupper($this->input->post('officer_in_charge')),
+                'nok_name' => strtoupper($this->input->post('nok_name')),
+                'nok_address' => strtoupper($this->input->post('nok_address')),
+                'nok_phone' => strtoupper($this->input->post('nok_phone')),
+                'nok_relation' => strtoupper($this->input->post('nok_relation')),
+            );
+
+            $this->db->insert('pemohon_seed', $data_pemohon);
+
+            $config = array(
+                'protocol' => 'mail',
+                'mailtype' => 'html',
+                'charset' => 'iso-8859-1',
+                'mailpath' => '/usr/sbin/sendmail',
+            );
+
+            $this->load->library('email');
+            $this->email->initialize($config);
+
+            $subject = "" . $this->input->post('course_selection') . " Application";
+            $message = "Salam Sejahtera, <br><br>";
+
+            $message .= '<br><table rules="none" bordercolor="#ffffff" cellpadding="10" border="0" style = "border-collapse: collapse;">';
+            $message .= "<tr><td><strong>Course Selection: </td><td>" . $this->input->post('course_selection') . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Full Name: </td><td>" . strtoupper($this->input->post('name')) . "</strong></td></tr>";
+            $message .= "<tr><td><strong>NRIC/Passport: </td><td>" . strtoupper($this->input->post('nric')) . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Gender: </td><td>" . strtoupper($this->input->post('gender')) . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Telephone Number : </td><td>" . $this->input->post('hp') . "</strong></td></tr>";
+            $message .= "<tr><td><strong>E-mail : </td><td>" . $this->input->post('email') . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Payment Terms : </td><td>" . $this->input->post('institution_name') . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Name of Company </td><td>" . strtoupper($this->input->post('nama_of_organization')) . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Office Number</td><td>" . strtoupper($this->input->post('organization_number')) . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Address of Company</td><td>" . strtoupper($this->input->post('org_address')) . "</strong></td></tr>";
+
+            $message .= "<tr><td><strong>Office Email : </td><td>" . $this->input->post('org_email') . "</strong></td></tr>";
+            $message .= "<tr><td><strong>Officer In Charge : </td><td>" . strtoupper($this->input->post('officer_in_charge')) . "</strong></td></tr>";
+
+            $message .= "</table>";
+
+            $message .= "</body></html>";
+
+            // $this->load->library('email');
+
+            $this->email->from('');
+            $this->email->to('');
+            $this->email->bcc('');
+
+            $this->email->subject($subject);
+            $this->email->message($message);
+
+            $this->email->send();
+
+            echo "<script>
+    			  window.alert('Borang permohonan berjaya dihantar');
+    			  window.location.href = 'shortcourse_apps';
+			</script>";
+
+            $this->shortcourse_apps();
+
+        }
+
+        $this->output->enable_profiler(false);
+    }
+
 }
