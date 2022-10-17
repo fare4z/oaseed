@@ -37,16 +37,8 @@ class Admission extends CI_Controller
 
         $data['Courses'] = array(
             '' => 'Please Choose',
-            'Certificate of Competency in Food & Beverage Operations' => 'Certificate of Competency in Food & Beverage Operations',
-            'Certificate of Competency in Fast Food Operations' => 'Certificate of Competency in Fast Food Operations',
-            'Certificate of Competency in Culinary Arts' => 'Certificate of Competency in Culinary Arts',
-            'Certificate of Completion in Retail Operations' => 'Certificate of Completion in Retail Operations',
-            'Certificate of Completion in Wellness Management' => 'Certificate of Completion in Wellness Management',
-            'Certificate of Completion in Accommodation Services' => 'Certificate of Completion in Accommodation Services',
-            'Certificate of Completion in Reception Operations Services' => 'Certificate of Completion in Reception Operations Services',
-            'Certificate of Completion in Barista & Cafe Operation' => 'Certificate of Completion in Barista & Cafe Operations',
-            'Certificate of Completion in Call Centre' => 'Certificate of Completion in Call Centre',
-            'Certificate of Completion in Safety & Security Operations' => 'Certificate of Completion in Safety & Security Operations',
+            'course id' => 'course description',
+       
         );
 
         $data['gender'] = array(
